@@ -1,14 +1,19 @@
 $(document).ready(function(){
 	// load JSON file
-	$.getJSON( "data.json", function(data) {
+	$.getJSON( "https://nyscherm.github.io/candidate-contributions/data.json", function(data) {
 		var contributions = data;
 		var contributionTotals = getTotals(contributions);
 		addDetails(contributionTotals);
 		drawChart(contributionTotals);
 		$(".loader").css("display", "none");
+		$(".viewSwitch").css("display", "inline-block");
 	}).fail(function() {
     	console.log("Error loading JSON file");
   	});  	  	
+
+  	$(".viewSwitch").click(function(){
+  		toggleView();
+  	});
 });
 
 // find total contribution amount for each candidate
@@ -83,4 +88,20 @@ function drawChart(data) {
 	svg.append("g")
 		.attr("transform", "translate(100, 0)")
 		.call(d3.axisLeft(y));
+}
+
+// change between chart and text display
+function toggleView() {
+	if ($("#chart").css("display") == "none") {
+		$("#chart").css("display", "block");
+		$(".info").css("display", "none");
+		$(".viewSwitch .graph").css("background-color", "#d9d9d9");		
+		$(".viewSwitch .text").css("background-color", "#fff");		
+	}
+	else {
+		$("#chart").css("display", "none");
+		$(".info").css("display", "block");
+		$(".viewSwitch .text").css("background-color", "#d9d9d9");		
+		$(".viewSwitch .graph").css("background-color", "#fff");				
+	}
 }
