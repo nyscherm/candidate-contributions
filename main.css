@@ -3,15 +3,18 @@ body {
     font-family: 'Quicksand', sans-serif;
 }
 
+p {
+    font-size: 18px;
+}
+
 .container {
-    width: 70%;
+	width: 70%;
     margin: 0 auto;
     padding: 15px 0;
 }
 
 #chart {
-	width: 70%;
-    margin: 0 auto;
+    margin-left: 15%;
     padding: 15px 0;
 }
 
@@ -35,7 +38,7 @@ body {
 
 svg {
 	width: 1150px;
-	height: 1000px;
+	height: 800px;
 }
 
 rect.bar { 
@@ -49,7 +52,7 @@ rect.bar:hover {
 }
 
 g text {
-	font-size: 12px;
+	font-size: 14px;
 }
 
 .info .details {
