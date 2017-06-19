@@ -4,7 +4,7 @@ $(document).ready(function(){
 	var index = -1;
 
 	// load JSON file
-	$.getJSON( "ajax/https://nyscherm.github.io/candidate-contributions/data.json", function(data) {
+	$.getJSON( "data.json", function(data) {
 		var contributions = data;
 	}).fail(function() {
     	console.log("Error loading JSON file");
