@@ -1,0 +1,58 @@
+body {
+    margin: 50px 0 60px;
+    font-family: 'Quicksand', sans-serif;
+}
+
+.container {
+    width: 70%;
+    margin: 0 auto;
+    padding: 15px 0;
+}
+
+#chart {
+	width: 70%;
+    margin: 0 auto;
+    padding: 15px 0;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #009966;
+    border-bottom: 16px solid #009966;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin-left: 25%;
+    margin-top: 50px; 
+    animation: spin 3s linear infinite;
+    -webkit-animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+svg {
+	width: 1150px;
+	height: 1000px;
+}
+
+rect.bar { 
+  	fill: #009966;
+	stroke: #009966;
+  	stroke-width: 2;
+}
+
+rect.bar:hover {
+	fill: #00cc88; 
+}
+
+g text {
+	font-size: 12px;
+}
+
+.info .details {
+	max-height: 500px;
+	overflow: scroll;
+}
