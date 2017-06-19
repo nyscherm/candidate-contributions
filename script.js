@@ -1,17 +1,23 @@
 $(document).ready(function(){
-	var current = "";
-	var contributionTotals = []; // array of objects that holds relevant info for each candidate
-	var index = -1;
-
 	// load JSON file
 	$.getJSON( "data.json", function(data) {
 		var contributions = data;
+		var contributionTotals = getTotals(contributions);
+		addDetails(contributionTotals);
+		drawChart(contributionTotals);
+		$(".loader").css("display", "none");
 	}).fail(function() {
     	console.log("Error loading JSON file");
-  	});
+  	});  	  	
+});
 
-	// find total contribution amount for each candidate
-  	$.each(contributions.data, function(key) {
+// find total contribution amount for each candidate
+function getTotals(contributions) {
+	var contributionTotals = []; 
+	var current = "";
+	var index = -1;
+
+	$.each(contributions.data, function(key) {
   		current = contributions.data[key].candidate;
   		index = contributionTotals.map(function(e) { return e.candidate; }).indexOf(current);
 
@@ -25,17 +31,16 @@ $(document).ready(function(){
   			contributionTotals[index].amount += parseInt(contributions.data[key].amount);
   		}
   	});
+  	return contributionTotals;
+}
 
-  	// add summarized information to page
-	$(".info").append("<h2>Totals:</h2>");
+// add summarized information to page
+function addDetails(contributionTotals) {
+	$(".info").prepend("<h2>Totals:</h2>");
   	for (var entry in contributionTotals) {
   		$(".info .details").append("<p>"+contributionTotals[entry].candidate+": $"+contributionTotals[entry].amount+"</p>");
   	}
-
-  	// add chart
-  	drawChart(contributionTotals);
-  	$(".loader").css("display", "none");
-});
+}
 
 function drawChart(data) { 
 	var max = d3.max(data.map(function(d) {return d.amount}));
