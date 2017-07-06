@@ -12,14 +12,19 @@ p {
 }
 
 .container {
-	width: 70%;
+	width: 90%;
     margin: 0 auto;
     padding: 15px 0;
 }
 
-#chart {
-    margin-left: 15%;
-    padding: 15px 0;
+.totals, .percent {
+    margin: 0;
+    text-align: center;
+    display: none;
+}
+
+.box {
+    margin: 0 5%;
 }
 
 .loader {
@@ -66,30 +71,16 @@ p {
     display: none;
 }
 
-svg {
-	width: 1150px;
-	height: 1000px;
-}
+@media screen and (min-width: 650px) {
+    .container {
+        width: 70%;
+    }
 
-rect.bar { 
-  	fill: #009966;
-	stroke: #009966;
-  	stroke-width: 2;
-}
+    .totals, .percent {
+        margin: 0 15% 0 5%;
+    }
 
-rect.bar:hover {
-	fill: #00cc88; 
+    .box {
+        margin: 0 20%;
+    }
 }
-
-g text {
-	font-size: 14px;
-}
-
-.tooltip {
-        line-height: 1;
-        font-weight: bold;
-        padding: 12px;
-        background: rgba(0, 0, 0, 0.8);
-        color: #fff;
-        border-radius: 2px;
-      }
