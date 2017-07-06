@@ -7,12 +7,19 @@ $(document).ready(function(){
 		drawChart(contributionTotals);
 		$(".loader").css("display", "none");
 		$(".viewSwitch").css("display", "inline-block");
+		toggleView("totals");
 	}).fail(function() {
     	console.log("Error loading JSON file");
   	});  	  	
 
-  	$(".viewSwitch").click(function(){
-  		toggleView();
+  	$(".bar").click(function(){
+  		toggleView("totals");
+  	});
+  	$(".pie").click(function(){
+  		toggleView("percent");
+  	});
+  	$(".text").click(function(){
+  		toggleView("text");
   	});
 });
 
@@ -43,65 +50,97 @@ function getTotals(contributions) {
 function addDetails(contributionTotals) {
 	$(".info").prepend("<h2>Totals:</h2>");
   	for (var entry in contributionTotals) {
-  		$(".info .details").append("<p>"+contributionTotals[entry].candidate+": $"+contributionTotals[entry].amount+"</p>");
+  		$(".info .details").append("<p>"+contributionTotals[entry].candidate+": $"+contributionTotals[entry].amount.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")+"</p>");
   	}
 }
 
 function drawChart(data) { 
-	var max = d3.max(data.map(function(d) {return d.amount}));
-	var scale = 750000;
-	var height = max/scale;
+	var candidates = [];
+	var totals = [];
+	var colors = [];
 
-	// set graph scale for axis
-	var x = d3.scaleOrdinal()
-	 	.domain(data.map(function(d) {return d.candidate}))
-		.range(data.map(function(d,i){return i * 28}));
-	var y = d3.scaleLinear()
-	  	.domain([0, max])
-	  	.range([height, 0]);
+	for (var entry in data) {
+  		candidates.push(data[entry].candidate);
+  		totals.push(data[entry].amount);
+  		colors.push(dynamicColors());
+  	}
 
-	// add the bars
-    var svg = d3.select("svg");
-	svg.selectAll("rect")
-	    .data(data)
-	    .enter()
-	    .append("rect")
-	    	.attr("class", "bar")
-	        .attr("height", function(d) {return d.amount / scale})
-	        .attr("width","20")
-	        .attr("x", function(d, i) {return i * 28 + 102})
-	        .attr("y", function(d) {return height - (d.amount / scale)});
+  	console.log(candidates);
+  	console.log(totals);
 
-	// add the x axis
-	svg.append("g")
-		.attr("width", "100%")
-		.attr("transform", "translate(110," + height + ")")
-		.call(d3.axisBottom(x))
-		.selectAll("text")
-		    .attr("y", 0)
-		    .attr("x", 9)
-		    .attr("dy", ".35em")
-		    .attr("transform", "rotate(90)")
-		    .style("text-anchor", "start");
+	var chart = new Chart(document.getElementById("barChart"), {
+	    type: 'bar',
+	    data: {
+	        labels: candidates,
+	        datasets: [{
+	            label: 'Total contributions',
+	            data: totals,
+	            backgroundColor: 'rgb(0, 153, 102)',
+            	borderColor: 'rgb(0, 153, 102)',
+	            borderWidth: 1
+	        }]
+	    },
+	    options: {
+	    	legend: { display: false },
+			scales: {
+				yAxes: [{
+                	type: 'logarithmic',
+            	}]
+            }
+	    }
+	});
 
-	// add the y axis
-	svg.append("g")
-		.attr("transform", "translate(100, 0)")
-		.call(d3.axisLeft(y));
+	var chart = new Chart(document.getElementById("pieChart"), {
+	    type: 'pie',
+	    data: {
+	        labels: candidates,
+	        datasets: [{
+	            label: 'Total contributions',
+	            data: totals,
+	            backgroundColor: colors
+	            //backgroundColor: 'rgb(0, 153, 102)',
+            	//borderColor: 'rgb(0, 153, 102)',
+	            //borderWidth: 1
+	        }]
+	    },
+	    options: {
+	    	legend: { display: false }
+	    }
+	});
 }
 
 // change between chart and text display
-function toggleView() {
-	if ($("#chart").css("display") == "none") {
-		$("#chart").css("display", "block");
+function toggleView(button) {
+	if (button == "totals") {
+		$(".totals").css("display", "block");
+		$(".percent").css("display", "none");
 		$(".info").css("display", "none");
-		$(".viewSwitch .graph").css("background-color", "#d9d9d9");		
+		$(".viewSwitch .bar").css("background-color", "#d9d9d9");				
+		$(".viewSwitch .pie").css("background-color", "#fff");	
+		$(".viewSwitch .text").css("background-color", "#fff");		
+	}
+	else if (button == "percent") {
+		$(".totals").css("display", "none");
+		$(".percent").css("display", "block");
+		$(".info").css("display", "none");
+		$(".viewSwitch .bar").css("background-color", "#fff");			
+		$(".viewSwitch .pie").css("background-color", "#d9d9d9");			
 		$(".viewSwitch .text").css("background-color", "#fff");		
 	}
 	else {
-		$("#chart").css("display", "none");
+		$(".totals").css("display", "none");
+		$(".percent").css("display", "none");
 		$(".info").css("display", "block");
-		$(".viewSwitch .text").css("background-color", "#d9d9d9");		
-		$(".viewSwitch .graph").css("background-color", "#fff");				
+		$(".viewSwitch .text").css("background-color", "#d9d9d9");				
+		$(".viewSwitch .pie").css("background-color", "#fff");		
+		$(".viewSwitch .bar").css("background-color", "#fff");				
 	}
+}
+
+// because Chart.js just won't do random colors for each data point for you
+function dynamicColors() {
+	    var r = Math.floor(Math.random() * 255);
+	    var g = Math.floor(Math.random() * 255);
+	    var b = Math.floor(Math.random() * 255);
+	    return "rgb(" + r + "," + g + "," + b + ")";
 }
