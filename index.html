@@ -11,18 +11,26 @@
 		<h1>Campaign Contributions to Presidential​ Candidates during 2015-2016</h1>
 		<div class="loader"></div>
 		<div class="viewSwitch">
-			<div class="graph">Graph</div>
-			<div class="text">Text</div>
+			<div class="bar">Totals</div>
+			<div class="pie">Percent</div>
+			<div class="text">Raw</div>
 		</div>
 		<div class="info">
 			<div class="details"></div>
 		</div>
 	</div>
-	<div id="chart">
-		<svg></svg>
+	
+	<div class="totals">
+		<h2>Total contributions to individual candidates</h2>
+		<canvas id="barChart"></canvas>
 	</div>
 
-    <script src="https://d3js.org/d3.v4.min.js"></script>
+	<div class="percent">
+		<h2>Percent of all contribution money given to each candidate</h2>
+		<div class="box"><canvas id="pieChart"></canvas></div>
+	</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="script.js"></script>
 </body>
